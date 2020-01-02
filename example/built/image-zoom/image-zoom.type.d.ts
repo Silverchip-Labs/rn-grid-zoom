@@ -81,9 +81,8 @@ export declare class Props {
      * for disabling focus on image center if user doesn't want it
      */
     enableCenterFocus?: boolean;
-    minScale?: number;
-    maxScale?: number;
-    initialScale: number;
+    minScale: number;
+    maxScale: number;
     onClick?: (eventParams: IOnClick) => void;
     onDoubleClick?: () => void;
     onLongPress?: () => void;

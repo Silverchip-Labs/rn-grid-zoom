@@ -19,7 +19,6 @@ export default class App extends React.Component {
         cropHeight={Dimensions.get('window').height}
         imageWidth={IMAGE_WIDTH + IMAGE_OVERFLOW}
         imageHeight={IMAGE_WIDTH + IMAGE_OVERFLOW}
-        enableCenterFocus={false}
         minScale={0.2}
         maxScale={5}
       >

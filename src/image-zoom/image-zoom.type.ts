@@ -101,11 +101,9 @@ export class Props {
    */
   public enableCenterFocus?: boolean = true;
 
-  public minScale?: number = 0.6;
+  public minScale: number = 0.6;
 
-  public maxScale?: number = 10;
-
-  public initialScale: number = this.minScale || 0;
+  public maxScale: number = 10;
 
   public onClick?: (eventParams: IOnClick) => void = () => {
     //

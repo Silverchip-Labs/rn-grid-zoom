@@ -61,7 +61,6 @@ var Props = /** @class */ (function () {
         this.enableCenterFocus = true;
         this.minScale = 0.6;
         this.maxScale = 10;
-        this.initialScale = this.minScale || 0;
         this.onClick = function () {
             //
         };
