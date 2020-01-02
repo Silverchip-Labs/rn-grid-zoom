@@ -31,20 +31,39 @@ export default class App extends React.Component {
             paddingVertical: IMAGE_PADDING
           }}
         >
-          <Image
+          {this._renderRows()}
+          {/* <Image
             enableHorizontalBounce={true}
             style={{
               width: IMAGE_HEIGHT,
               height: IMAGE_HEIGHT
             }}
             source={chessboard}
-            // source={{
-            //   uri:
-            //     'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1522606437962&di=f93f5c645225a5681155ebcde27b257f&imgtype=0&src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F0159fa5944bcd3a8012193a34b762d.jpg%402o.jpg'
-            // }}
-          />
+            source={{
+              uri:
+                'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1522606437962&di=f93f5c645225a5681155ebcde27b257f&imgtype=0&src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F0159fa5944bcd3a8012193a34b762d.jpg%402o.jpg'
+            }}
+          /> */}
         </View>
       </ImageZoom>
     );
   }
+
+  _renderRows = () => {
+    return [1, 2, 3, 4, 5, 6, 7, 8].map(n => (
+      <View style={{ flexDirection: 'row' }}>{n % 2 ? this._renderEvenRow() : this._renderOddRow()}</View>
+    ));
+  };
+
+  _renderOddRow = () => {
+    return [1, 2, 3, 4, 5, 6, 7, 8].map(n => this._renderBox(n % 2 ? blackSquare : whiteSquare));
+  };
+
+  _renderEvenRow = () => {
+    return [1, 2, 3, 4, 5, 6, 7, 8].map(n => this._renderBox(n % 2 ? whiteSquare : blackSquare));
+  };
+
+  _renderBox = source => {
+    return <Image style={{ height: IMAGE_HEIGHT / 8, width: IMAGE_WIDTH / 8 }} source={source} />;
+  };
 }
