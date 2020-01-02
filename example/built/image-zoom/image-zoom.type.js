@@ -59,48 +59,24 @@ var Props = /** @class */ (function () {
          * for disabling focus on image center if user doesn't want it
          */
         this.enableCenterFocus = true;
-        /**
-         * minimum zoom scale
-         */
         this.minScale = 0.6;
-        /**
-         * maximum zoom scale
-         */
         this.maxScale = 10;
-        /**
-         * 单击的回调
-         */
+        this.initialScale = this.minScale || 0;
         this.onClick = function () {
             //
         };
-        /**
-         * 双击的回调
-         */
         this.onDoubleClick = function () {
             //
         };
-        /**
-         * 长按的回调
-         */
         this.onLongPress = function () {
             //
         };
-        /**
-         * 横向超出的距离，父级做图片切换时，可以监听这个函数
-         * 当此函数触发时，可以做切换操作
-         */
         this.horizontalOuterRangeOffset = function () {
             //
         };
-        /**
-         * 触发想切换到左边的图，向左滑动速度超出阈值时触发
-         */
         this.onDragLeft = function () {
             //
         };
-        /**
-         * 松手但是没有取消看图的回调
-         */
         this.responderRelease = function () {
             //
         };

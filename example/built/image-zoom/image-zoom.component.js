@@ -84,12 +84,7 @@ var ImageViewer = /** @class */ (function (_super) {
                     return;
                 }
             }
-            if (_this.props.enableCenterFocus && _this.scale < 1) {
-                // 如果缩放小于1，强制重置为 1
-                _this.scale = 1;
-                _this.animatedScale.setValue(_this.scale);
-            }
-            else if (_this.scale < (_this.props.minScale || 0)) {
+            if (_this.scale < (_this.props.minScale || 0)) {
                 // If the current scale is zoomed out too much, bounce back to the minScale
                 _this.scale = _this.props.minScale || 0;
                 _this.animatedScale.setValue(_this.scale);
@@ -140,13 +135,6 @@ var ImageViewer = /** @class */ (function (_super) {
                     _this.positionX = horizontalMax;
                 }
                 _this.animatedPositionX.setValue(_this.positionX);
-            }
-            // 拖拽正常结束后,如果没有缩放,直接回到0,0点
-            if (_this.props.enableCenterFocus && _this.scale === 1) {
-                _this.positionX = 0;
-                _this.positionY = 0;
-                _this.animatedPositionX.setValue(_this.positionX);
-                _this.animatedPositionY.setValue(_this.positionY);
             }
             // 水平溢出量置空
             _this.horizontalWholeOuterCounter = 0;

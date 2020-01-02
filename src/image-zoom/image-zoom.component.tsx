@@ -468,11 +468,7 @@ export default class ImageViewer extends React.Component<Props, State> {
       }
     }
 
-    if (this.props.enableCenterFocus && this.scale < 1) {
-      // 如果缩放小于1，强制重置为 1
-      this.scale = 1;
-      this.animatedScale.setValue(this.scale);
-    } else if (this.scale < (this.props.minScale || 0)) {
+    if (this.scale < (this.props.minScale || 0)) {
       // If the current scale is zoomed out too much, bounce back to the minScale
       this.scale = this.props.minScale || 0;
       this.animatedScale.setValue(this.scale);
@@ -528,15 +524,6 @@ export default class ImageViewer extends React.Component<Props, State> {
         this.positionX = horizontalMax;
       }
       this.animatedPositionX.setValue(this.positionX);
-    }
-
-    // 拖拽正常结束后,如果没有缩放,直接回到0,0点
-    if (this.props.enableCenterFocus && this.scale === 1) {
-      this.positionX = 0;
-      this.positionY = 0;
-
-      this.animatedPositionX.setValue(this.positionX);
-      this.animatedPositionY.setValue(this.positionY);
     }
 
     // 水平溢出量置空

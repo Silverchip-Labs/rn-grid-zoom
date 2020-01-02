@@ -16,12 +16,11 @@ interface IOnMove {
 }
 
 export interface IOnClick {
-  locationX: number,
-  locationY: number,
-  pageX: number,
-  pageY: number
+  locationX: number;
+  locationY: number;
+  pageX: number;
+  pageY: number;
 }
-
 
 export class Props {
   /**
@@ -102,55 +101,32 @@ export class Props {
    */
   public enableCenterFocus?: boolean = true;
 
-  /**
-   * minimum zoom scale
-   */
   public minScale?: number = 0.6;
 
-  /**
-   * maximum zoom scale
-   */
   public maxScale?: number = 10;
 
-  /**
-   * 单击的回调
-   */
+  public initialScale: number = this.minScale || 0;
+
   public onClick?: (eventParams: IOnClick) => void = () => {
     //
   };
 
-  /**
-   * 双击的回调
-   */
   public onDoubleClick?: () => void = () => {
     //
   };
 
-  /**
-   * 长按的回调
-   */
   public onLongPress?: () => void = () => {
     //
   };
 
-  /**
-   * 横向超出的距离，父级做图片切换时，可以监听这个函数
-   * 当此函数触发时，可以做切换操作
-   */
   public horizontalOuterRangeOffset?: (offsetX?: number) => void = () => {
     //
   };
 
-  /**
-   * 触发想切换到左边的图，向左滑动速度超出阈值时触发
-   */
   public onDragLeft?: () => void = () => {
     //
   };
 
-  /**
-   * 松手但是没有取消看图的回调
-   */
   public responderRelease?: (vx?: number, scale?: number) => void = () => {
     //
   };
