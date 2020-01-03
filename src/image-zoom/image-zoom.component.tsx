@@ -23,10 +23,12 @@ export default class ImageViewer extends React.Component<Props, State> {
   private lastPositionX: number | null = null;
   private positionX = 0;
   private animatedPositionX = new Animated.Value(0);
+  private lastValidPositionX = 0;
 
   private lastPositionY: number | null = null;
   private positionY = 0;
   private animatedPositionY = new Animated.Value(0);
+  private lastValidPositionY = 0;
 
   private scale = this.props.minScale;
   private animatedScale = new Animated.Value(1);
@@ -43,22 +45,18 @@ export default class ImageViewer extends React.Component<Props, State> {
   private horizontalWholeCounter = 0;
   private verticalWholeCounter = 0;
 
-  private singleClickTimeout: any;
-  private longPressTimeout: any;
+  private singleClickTimeout?: number;
+  private isLongPress = false;
+  private longPressTimeout?: number;
 
   private lastClickTime = 0;
 
+  private isDoubleClick = false;
   private doubleClickX = 0;
   private doubleClickY = 0;
 
-  private isDoubleClick = false;
-  private isLongPress = false;
-
-  private midpointX: number = 0;
-  private midpointY: number = 0;
-
-  private lastValidPositionX = 0;
-  private lastValidPositionY = 0;
+  private midpointX = 0;
+  private midpointY = 0;
 
   // Keeps max number of contact point in 1 gesture
   private maxContactPoints = 0;
