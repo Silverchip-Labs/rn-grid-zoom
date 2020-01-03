@@ -7,7 +7,8 @@ import {
   StyleSheet,
   View,
   GestureResponderEvent,
-  PanResponderGestureState
+  PanResponderGestureState,
+  PanResponderCallbacks
 } from 'react-native';
 import styles from './image-zoom.style';
 import { ICenterOn, Props, State } from './image-zoom.type';
@@ -108,18 +109,20 @@ export default class ImageViewer extends React.Component<Props, State> {
     );
   }
 
-  componentWillMount() {
-    this.imagePanResponder = PanResponder.create({
+  componentWillMount() {}
+
+  componentDidMount() {
+    // initialise responder
+    const panResponderConfig: PanResponderCallbacks = {
       onStartShouldSetPanResponder: () => true,
       onPanResponderTerminationRequest: () => false,
       onPanResponderGrant: this._handlePanResponderGrant,
       onPanResponderMove: this._handlePanResponderMove,
       onPanResponderRelease: this._handlePanResponderRelease,
       onPanResponderTerminate: () => {}
-    });
-  }
+    };
+    this.imagePanResponder = PanResponder.create(panResponderConfig);
 
-  componentDidMount() {
     this.centerOn({
       x: 0,
       y: 0,
@@ -129,8 +132,9 @@ export default class ImageViewer extends React.Component<Props, State> {
   }
 
   public handleLayout(event: LayoutChangeEvent) {
-    if (this.props.layoutChange) {
-      this.props.layoutChange(event);
+    const { layoutChange } = this.props;
+    if (layoutChange) {
+      layoutChange(event);
     }
   }
 

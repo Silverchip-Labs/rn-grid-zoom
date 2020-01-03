@@ -17,13 +17,10 @@ export default class ImageViewer extends React.Component<Props, State> {
     private zoomLastDistance;
     private zoomCurrentDistance;
     private imagePanResponder;
-    private lastTouchStartTime;
     private horizontalWholeOuterCounter;
     private swipeDownOffset;
     private horizontalWholeCounter;
     private verticalWholeCounter;
-    private centerDiffX;
-    private centerDiffY;
     private singleClickTimeout;
     private longPressTimeout;
     private lastClickTime;
@@ -31,42 +28,20 @@ export default class ImageViewer extends React.Component<Props, State> {
     private doubleClickY;
     private isDoubleClick;
     private isLongPress;
-    private isHorizontalWrap;
     private midpointX;
     private midpointY;
     private lastValidPositionX;
     private lastValidPositionY;
     private maxContactPoints;
     private isInitialPinch;
-    componentWillMount(): void;
-    _getOffsetAdjustedPosition(x: number, y: number): {
-        x: number;
-        y: number;
-    };
-    resetScale: () => void;
-    panResponderReleaseResolve: () => void;
-    componentDidMount(): void;
-    componentWillReceiveProps(nextProps: Props): void;
-    imageDidMove(type: string): void;
-    didCenterOnChange(params: {
-        x: number;
-        y: number;
-        scale: number;
-        duration: number;
-    }, paramsNext: {
-        x: number;
-        y: number;
-        scale: number;
-        duration: number;
-    }): boolean;
-    centerOn(params: ICenterOn): void;
-    /**
-     * 图片区域视图渲染完毕
-     */
-    handleLayout(event: LayoutChangeEvent): void;
-    /**
-     * 重置大小和位置
-     */
-    reset(): void;
     render(): JSX.Element;
+    componentWillMount(): void;
+    componentDidMount(): void;
+    handleLayout(event: LayoutChangeEvent): void;
+    centerOn(params: ICenterOn): void;
+    private _handleMove;
+    private _handlePanResponderGrant;
+    private _handlePanResponderMove;
+    private _handlePanResponderRelease;
+    private _resolvePanResponderRelease;
 }

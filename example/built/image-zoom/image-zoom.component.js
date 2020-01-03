@@ -445,17 +445,18 @@ var ImageViewer = /** @class */ (function (_super) {
         </react_native_1.Animated.View>
       </react_native_1.View>);
     };
-    ImageViewer.prototype.componentWillMount = function () {
-        this.imagePanResponder = react_native_1.PanResponder.create({
+    ImageViewer.prototype.componentWillMount = function () { };
+    ImageViewer.prototype.componentDidMount = function () {
+        // initialise responder
+        var panResponderConfig = {
             onStartShouldSetPanResponder: function () { return true; },
             onPanResponderTerminationRequest: function () { return false; },
             onPanResponderGrant: this._handlePanResponderGrant,
             onPanResponderMove: this._handlePanResponderMove,
             onPanResponderRelease: this._handlePanResponderRelease,
             onPanResponderTerminate: function () { }
-        });
-    };
-    ImageViewer.prototype.componentDidMount = function () {
+        };
+        this.imagePanResponder = react_native_1.PanResponder.create(panResponderConfig);
         this.centerOn({
             x: 0,
             y: 0,
@@ -464,8 +465,9 @@ var ImageViewer = /** @class */ (function (_super) {
         });
     };
     ImageViewer.prototype.handleLayout = function (event) {
-        if (this.props.layoutChange) {
-            this.props.layoutChange(event);
+        var layoutChange = this.props.layoutChange;
+        if (layoutChange) {
+            layoutChange(event);
         }
     };
     ImageViewer.prototype.centerOn = function (params) {
