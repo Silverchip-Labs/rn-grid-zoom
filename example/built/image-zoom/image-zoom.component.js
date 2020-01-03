@@ -39,7 +39,6 @@ var ImageViewer = /** @class */ (function (_super) {
         _this.animatedScale = new react_native_1.Animated.Value(1);
         _this.zoomLastDistance = null;
         _this.zoomCurrentDistance = 0;
-        _this.imagePanResponder = null;
         // During the sliding process, the overall lateral transboundary offset
         _this.horizontalWholeOuterCounter = 0;
         // offset during sliding
@@ -60,6 +59,7 @@ var ImageViewer = /** @class */ (function (_super) {
         _this.maxContactPoints = 0;
         _this.isInitialPinch = true;
         _this._handlePanResponderGrant = function (evt) {
+            var _a = _this.props, onLongPress = _a.onLongPress, longPressTime = _a.longPressTime, doubleClickInterval = _a.doubleClickInterval, onDoubleClick = _a.onDoubleClick;
             _this.lastPositionX = null;
             _this.lastPositionY = null;
             _this.zoomLastDistance = null;
@@ -76,17 +76,17 @@ var ImageViewer = /** @class */ (function (_super) {
             }
             _this.longPressTimeout = setTimeout(function () {
                 _this.isLongPress = true;
-                if (_this.props.onLongPress) {
-                    _this.props.onLongPress();
+                if (onLongPress) {
+                    onLongPress();
                 }
-            }, _this.props.longPressTime);
+            }, longPressTime);
             var isSingleFingerPress = evt.nativeEvent.changedTouches.length <= 1;
             if (isSingleFingerPress) {
-                var isDoubleTap = new Date().getTime() - _this.lastClickTime < (_this.props.doubleClickInterval || 0);
+                var isDoubleTap = new Date().getTime() - _this.lastClickTime < (doubleClickInterval || 0);
                 if (isDoubleTap) {
                     _this.lastClickTime = 0;
-                    if (_this.props.onDoubleClick) {
-                        _this.props.onDoubleClick();
+                    if (onDoubleClick) {
+                        onDoubleClick();
                     }
                     // cancel long press
                     clearTimeout(_this.longPressTimeout);
@@ -108,7 +108,7 @@ var ImageViewer = /** @class */ (function (_super) {
                             var beforeScale = _this.scale;
                             // Start zooming
                             _this.scale = 2;
-                            // zoo diff
+                            // zoom diff
                             var diffScale = _this.scale - beforeScale;
                             // Find the displacement of the center point of the two hands from the center of the page
                             // moving position
@@ -417,6 +417,15 @@ var ImageViewer = /** @class */ (function (_super) {
             _this.swipeDownOffset = 0;
             _this._handleMove('onPanResponderRelease');
         };
+        // initialising panresponder in constructor to prevent usage of componentwillmount
+        _this.imagePanResponder = react_native_1.PanResponder.create({
+            onStartShouldSetPanResponder: function () { return true; },
+            onPanResponderTerminationRequest: function () { return false; },
+            onPanResponderGrant: _this._handlePanResponderGrant,
+            onPanResponderMove: _this._handlePanResponderMove,
+            onPanResponderRelease: _this._handlePanResponderRelease,
+            onPanResponderTerminate: function () { }
+        });
         return _this;
     }
     ImageViewer.prototype.render = function () {
@@ -444,18 +453,6 @@ var ImageViewer = /** @class */ (function (_super) {
           </react_native_1.View>
         </react_native_1.Animated.View>
       </react_native_1.View>);
-    };
-    ImageViewer.prototype.componentWillMount = function () {
-        // initialise responder
-        var panResponderConfig = {
-            onStartShouldSetPanResponder: function () { return true; },
-            onPanResponderTerminationRequest: function () { return false; },
-            onPanResponderGrant: this._handlePanResponderGrant,
-            onPanResponderMove: this._handlePanResponderMove,
-            onPanResponderRelease: this._handlePanResponderRelease,
-            onPanResponderTerminate: function () { }
-        };
-        this.imagePanResponder = react_native_1.PanResponder.create(panResponderConfig);
     };
     ImageViewer.prototype.componentDidMount = function () {
         this.centerOn({

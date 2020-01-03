@@ -33,8 +33,6 @@ export default class ImageViewer extends React.Component<Props, State> {
   private zoomLastDistance: number | null = null;
   private zoomCurrentDistance = 0;
 
-  private imagePanResponder: PanResponderInstance | null = null;
-
   // During the sliding process, the overall lateral transboundary offset
   private horizontalWholeOuterCounter = 0;
 
@@ -92,7 +90,7 @@ export default class ImageViewer extends React.Component<Props, State> {
           width: this.props.cropWidth,
           height: this.props.cropHeight
         }}
-        {...this.imagePanResponder!.panHandlers}
+        {...this.imagePanResponder.panHandlers}
       >
         <Animated.View style={animateConf} renderToHardwareTextureAndroid>
           <View
@@ -107,19 +105,6 @@ export default class ImageViewer extends React.Component<Props, State> {
         </Animated.View>
       </View>
     );
-  }
-
-  componentWillMount() {
-    // initialise responder
-    const panResponderConfig: PanResponderCallbacks = {
-      onStartShouldSetPanResponder: () => true,
-      onPanResponderTerminationRequest: () => false,
-      onPanResponderGrant: this._handlePanResponderGrant,
-      onPanResponderMove: this._handlePanResponderMove,
-      onPanResponderRelease: this._handlePanResponderRelease,
-      onPanResponderTerminate: () => {}
-    };
-    this.imagePanResponder = PanResponder.create(panResponderConfig);
   }
 
   componentDidMount() {
@@ -174,6 +159,8 @@ export default class ImageViewer extends React.Component<Props, State> {
   }
 
   private _handlePanResponderGrant = (evt: GestureResponderEvent) => {
+    const { onLongPress, longPressTime, doubleClickInterval, onDoubleClick } = this.props;
+
     this.lastPositionX = null;
     this.lastPositionY = null;
     this.zoomLastDistance = null;
@@ -190,20 +177,21 @@ export default class ImageViewer extends React.Component<Props, State> {
     if (this.longPressTimeout) {
       clearTimeout(this.longPressTimeout);
     }
+
     this.longPressTimeout = setTimeout(() => {
       this.isLongPress = true;
-      if (this.props.onLongPress) {
-        this.props.onLongPress();
+      if (onLongPress) {
+        onLongPress();
       }
-    }, this.props.longPressTime);
+    }, longPressTime);
 
     const isSingleFingerPress = evt.nativeEvent.changedTouches.length <= 1;
     if (isSingleFingerPress) {
-      const isDoubleTap = new Date().getTime() - this.lastClickTime < (this.props.doubleClickInterval || 0);
+      const isDoubleTap = new Date().getTime() - this.lastClickTime < (doubleClickInterval || 0);
       if (isDoubleTap) {
         this.lastClickTime = 0;
-        if (this.props.onDoubleClick) {
-          this.props.onDoubleClick();
+        if (onDoubleClick) {
+          onDoubleClick();
         }
 
         // cancel long press
@@ -231,7 +219,7 @@ export default class ImageViewer extends React.Component<Props, State> {
             // Start zooming
             this.scale = 2;
 
-            // zoo diff
+            // zoom diff
             const diffScale = this.scale - beforeScale;
             // Find the displacement of the center point of the two hands from the center of the page
             // moving position
@@ -573,4 +561,14 @@ export default class ImageViewer extends React.Component<Props, State> {
 
     this._handleMove('onPanResponderRelease');
   };
+
+  // initialising panresponder in constructor to prevent usage of componentwillmount
+  private imagePanResponder: PanResponderInstance = PanResponder.create({
+    onStartShouldSetPanResponder: () => true,
+    onPanResponderTerminationRequest: () => false,
+    onPanResponderGrant: this._handlePanResponderGrant,
+    onPanResponderMove: this._handlePanResponderMove,
+    onPanResponderRelease: this._handlePanResponderRelease,
+    onPanResponderTerminate: () => {}
+  });
 }

@@ -1,21 +1,27 @@
 "use strict";
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var __assign = (this && this.__assign) || Object.assign || function(t) {
-    for (var s, i = 1, n = arguments.length; i < n; i++) {
-        s = arguments[i];
-        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-            t[p] = s[p];
-    }
-    return t;
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
@@ -39,7 +45,6 @@ var ImageViewer = /** @class */ (function (_super) {
         _this.animatedScale = new react_native_1.Animated.Value(1);
         _this.zoomLastDistance = null;
         _this.zoomCurrentDistance = 0;
-        _this.imagePanResponder = null;
         // During the sliding process, the overall lateral transboundary offset
         _this.horizontalWholeOuterCounter = 0;
         // offset during sliding
@@ -60,6 +65,7 @@ var ImageViewer = /** @class */ (function (_super) {
         _this.maxContactPoints = 0;
         _this.isInitialPinch = true;
         _this._handlePanResponderGrant = function (evt) {
+            var _a = _this.props, onLongPress = _a.onLongPress, longPressTime = _a.longPressTime, doubleClickInterval = _a.doubleClickInterval, onDoubleClick = _a.onDoubleClick;
             _this.lastPositionX = null;
             _this.lastPositionY = null;
             _this.zoomLastDistance = null;
@@ -76,17 +82,17 @@ var ImageViewer = /** @class */ (function (_super) {
             }
             _this.longPressTimeout = setTimeout(function () {
                 _this.isLongPress = true;
-                if (_this.props.onLongPress) {
-                    _this.props.onLongPress();
+                if (onLongPress) {
+                    onLongPress();
                 }
-            }, _this.props.longPressTime);
+            }, longPressTime);
             var isSingleFingerPress = evt.nativeEvent.changedTouches.length <= 1;
             if (isSingleFingerPress) {
-                var isDoubleTap = new Date().getTime() - _this.lastClickTime < (_this.props.doubleClickInterval || 0);
+                var isDoubleTap = new Date().getTime() - _this.lastClickTime < (doubleClickInterval || 0);
                 if (isDoubleTap) {
                     _this.lastClickTime = 0;
-                    if (_this.props.onDoubleClick) {
-                        _this.props.onDoubleClick();
+                    if (onDoubleClick) {
+                        onDoubleClick();
                     }
                     // cancel long press
                     clearTimeout(_this.longPressTimeout);
@@ -108,7 +114,7 @@ var ImageViewer = /** @class */ (function (_super) {
                             var beforeScale = _this.scale;
                             // Start zooming
                             _this.scale = 2;
-                            // zoo diff
+                            // zoom diff
                             var diffScale = _this.scale - beforeScale;
                             // Find the displacement of the center point of the two hands from the center of the page
                             // moving position
@@ -417,6 +423,15 @@ var ImageViewer = /** @class */ (function (_super) {
             _this.swipeDownOffset = 0;
             _this._handleMove('onPanResponderRelease');
         };
+        // initialising panresponder in constructor to prevent usage of componentwillmount
+        _this.imagePanResponder = react_native_1.PanResponder.create({
+            onStartShouldSetPanResponder: function () { return true; },
+            onPanResponderTerminationRequest: function () { return false; },
+            onPanResponderGrant: _this._handlePanResponderGrant,
+            onPanResponderMove: _this._handlePanResponderMove,
+            onPanResponderRelease: _this._handlePanResponderRelease,
+            onPanResponderTerminate: function () { }
+        });
         return _this;
     }
     ImageViewer.prototype.render = function () {
@@ -434,7 +449,7 @@ var ImageViewer = /** @class */ (function (_super) {
             ]
         };
         var parentStyles = react_native_1.StyleSheet.flatten(this.props.style);
-        return (<react_native_1.View style={__assign({}, image_zoom_style_1.default.container, parentStyles, { width: this.props.cropWidth, height: this.props.cropHeight })} {...this.imagePanResponder.panHandlers}>
+        return (<react_native_1.View style={__assign(__assign(__assign({}, image_zoom_style_1.default.container), parentStyles), { width: this.props.cropWidth, height: this.props.cropHeight })} {...this.imagePanResponder.panHandlers}>
         <react_native_1.Animated.View style={animateConf} renderToHardwareTextureAndroid>
           <react_native_1.View onLayout={this.handleLayout.bind(this)} style={{
             width: this.props.imageWidth,
@@ -445,16 +460,6 @@ var ImageViewer = /** @class */ (function (_super) {
         </react_native_1.Animated.View>
       </react_native_1.View>);
     };
-    ImageViewer.prototype.componentWillMount = function () {
-        this.imagePanResponder = react_native_1.PanResponder.create({
-            onStartShouldSetPanResponder: function () { return true; },
-            onPanResponderTerminationRequest: function () { return false; },
-            onPanResponderGrant: this._handlePanResponderGrant,
-            onPanResponderMove: this._handlePanResponderMove,
-            onPanResponderRelease: this._handlePanResponderRelease,
-            onPanResponderTerminate: function () { }
-        });
-    };
     ImageViewer.prototype.componentDidMount = function () {
         this.centerOn({
             x: 0,
@@ -464,8 +469,9 @@ var ImageViewer = /** @class */ (function (_super) {
         });
     };
     ImageViewer.prototype.handleLayout = function (event) {
-        if (this.props.layoutChange) {
-            this.props.layoutChange(event);
+        var layoutChange = this.props.layoutChange;
+        if (layoutChange) {
+            layoutChange(event);
         }
     };
     ImageViewer.prototype.centerOn = function (params) {

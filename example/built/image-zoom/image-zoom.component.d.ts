@@ -16,7 +16,6 @@ export default class ImageViewer extends React.Component<Props, State> {
     private animatedScale;
     private zoomLastDistance;
     private zoomCurrentDistance;
-    private imagePanResponder;
     private horizontalWholeOuterCounter;
     private swipeDownOffset;
     private horizontalWholeCounter;
@@ -35,7 +34,6 @@ export default class ImageViewer extends React.Component<Props, State> {
     private maxContactPoints;
     private isInitialPinch;
     render(): JSX.Element;
-    componentWillMount(): void;
     componentDidMount(): void;
     handleLayout(event: LayoutChangeEvent): void;
     centerOn(params: ICenterOn): void;
@@ -44,4 +42,5 @@ export default class ImageViewer extends React.Component<Props, State> {
     private _handlePanResponderMove;
     private _handlePanResponderRelease;
     private _resolvePanResponderRelease;
+    private imagePanResponder;
 }
