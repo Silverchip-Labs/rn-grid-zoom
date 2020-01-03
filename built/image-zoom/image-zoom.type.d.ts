@@ -81,38 +81,13 @@ export declare class Props {
      * for disabling focus on image center if user doesn't want it
      */
     enableCenterFocus?: boolean;
-    /**
-     * minimum zoom scale
-     */
-    minScale?: number;
-    /**
-     * maximum zoom scale
-     */
-    maxScale?: number;
-    /**
-     * 单击的回调
-     */
+    minScale: number;
+    maxScale: number;
     onClick?: (eventParams: IOnClick) => void;
-    /**
-     * 双击的回调
-     */
     onDoubleClick?: () => void;
-    /**
-     * 长按的回调
-     */
     onLongPress?: () => void;
-    /**
-     * 横向超出的距离，父级做图片切换时，可以监听这个函数
-     * 当此函数触发时，可以做切换操作
-     */
     horizontalOuterRangeOffset?: (offsetX?: number) => void;
-    /**
-     * 触发想切换到左边的图，向左滑动速度超出阈值时触发
-     */
     onDragLeft?: () => void;
-    /**
-     * 松手但是没有取消看图的回调
-     */
     responderRelease?: (vx?: number, scale?: number) => void;
     /**
      * If provided, this will be called everytime the map is moved
