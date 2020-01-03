@@ -109,9 +109,7 @@ export default class ImageViewer extends React.Component<Props, State> {
     );
   }
 
-  componentWillMount() {}
-
-  componentDidMount() {
+  componentWillMount() {
     // initialise responder
     const panResponderConfig: PanResponderCallbacks = {
       onStartShouldSetPanResponder: () => true,
@@ -122,7 +120,9 @@ export default class ImageViewer extends React.Component<Props, State> {
       onPanResponderTerminate: () => {}
     };
     this.imagePanResponder = PanResponder.create(panResponderConfig);
+  }
 
+  componentDidMount() {
     this.centerOn({
       x: 0,
       y: 0,

@@ -445,8 +445,7 @@ var ImageViewer = /** @class */ (function (_super) {
         </react_native_1.Animated.View>
       </react_native_1.View>);
     };
-    ImageViewer.prototype.componentWillMount = function () { };
-    ImageViewer.prototype.componentDidMount = function () {
+    ImageViewer.prototype.componentWillMount = function () {
         // initialise responder
         var panResponderConfig = {
             onStartShouldSetPanResponder: function () { return true; },
@@ -457,6 +456,8 @@ var ImageViewer = /** @class */ (function (_super) {
             onPanResponderTerminate: function () { }
         };
         this.imagePanResponder = react_native_1.PanResponder.create(panResponderConfig);
+    };
+    ImageViewer.prototype.componentDidMount = function () {
         this.centerOn({
             x: 0,
             y: 0,
