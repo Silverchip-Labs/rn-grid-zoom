@@ -9,6 +9,8 @@ import onek from './assets/1kx1k.png';
 import fullMap from './assets/orig.png';
 import bee from './assets/bee.png';
 
+import images from './Images';
+
 const IMAGE_HEIGHT = 2250;
 const IMAGE_WIDTH = 2250;
 const IMAGE_PADDING = 100;
@@ -36,8 +38,8 @@ export default class App extends React.Component {
         ref={this.imgZoomRef}
         cropWidth={this.dimensionWidth}
         cropHeight={this.dimensionHeight}
-        imageWidth={IMAGE_WIDTH}
-        imageHeight={IMAGE_WIDTH}
+        imageWidth={IMAGE_WIDTH + IMAGE_OVERFLOW}
+        imageHeight={IMAGE_WIDTH + IMAGE_OVERFLOW}
         minScale={MIN_SCALE}
         maxScale={MAX_SCALE}
         onMove={this.handleMove}
@@ -45,8 +47,8 @@ export default class App extends React.Component {
         <View
           pointerEvents={'none'}
           style={{
-            width: IMAGE_WIDTH,
-            height: IMAGE_HEIGHT,
+            width: IMAGE_WIDTH + IMAGE_OVERFLOW,
+            height: IMAGE_HEIGHT + IMAGE_OVERFLOW,
             paddingHorizontal: IMAGE_PADDING,
             paddingVertical: IMAGE_PADDING,
             backgroundColor: 'grey'
@@ -61,19 +63,8 @@ export default class App extends React.Component {
               top: this.state.beeY,
               position: 'absolute'
             }}
-          />
-          {renderBig ? (
-            <Image
-              enableHorizontalBounce={true}
-              style={{
-                width: IMAGE_WIDTH,
-                height: IMAGE_HEIGHT
-              }}
-              source={fullMap}
-            />
-          ) : (
-            this._renderRows()
-          )} */}
+          /> */}
+          {renderBig ? this._renderRows() : this._renderRows()}
         </View>
       </ImageZoom>
     );
@@ -97,29 +88,32 @@ export default class App extends React.Component {
 
   _renderRows = () => {
     return [1, 2, 3, 4, 5, 6, 7, 8].map(row => (
-      <View style={{ flexDirection: 'row' }}>{row % 2 ? this._renderEvenRow(row) : this._renderOddRow(row)}</View>
+      <View style={{ flexDirection: 'row' }}>{this._renderEvenRow(row)}</View>
+      // <View style={{ flexDirection: 'row' }}>{row % 2 ? this._renderEvenRow(row) : this._renderOddRow(row)}</View>
     ));
   };
 
-  _renderOddRow = rowNum => {
-    return [1, 2, 3, 4, 5, 6, 7, 8].map(col => this._renderBox(col % 2 ? onek : onek, rowNum, col));
+  _renderOddRow = row => {
+    return [1, 2, 3, 4, 5, 6, 7, 8].map(col => this._renderBox(images[row][col], row, col));
+    // return [1, 2, 3, 4, 5, 6, 7, 8].map(col => this._renderBox(col % 2 ? whiteSquare : blackSquare, row, col));
   };
 
-  _renderEvenRow = rowNum => {
-    return [1, 2, 3, 4, 5, 6, 7, 8].map(col => this._renderBox(col % 2 ? onek : onek, rowNum, col));
+  _renderEvenRow = row => {
+    return [1, 2, 3, 4, 5, 6, 7, 8].map(col => this._renderBox(images[row][col], row, col));
+    // return [1, 2, 3, 4, 5, 6, 7, 8].map(col => this._renderBox(col % 2 ? blackSquare : whiteSquare, row, col));
   };
 
-  _renderBox = (source, rowNum, colNum) => {
+  _renderBox = (source, row, colNum) => {
     const { current } = this.imgZoomRef;
-    const { positionX, positionY, scale } = current;
-    const { dimensionHeight: height, dimensionWidth: width } = this;
 
     // todo get scale offset for x and y, height width and scale
     // todo check if box
 
     const shouldRender = true;
-    if (shouldRender) return <Image style={{ height: IMAGE_HEIGHT / 9, width: IMAGE_WIDTH / 9 }} source={source} />;
+    if (shouldRender) {
+      return <Image style={{ height: IMAGE_HEIGHT / 8, width: IMAGE_WIDTH / 8 }} source={source} />;
+    }
 
-    return <View style={{ height: IMAGE_HEIGHT / 9, width: IMAGE_WIDTH / 9, backgroundColor: 'red' }} />;
+    return <View style={{ height: IMAGE_HEIGHT / 8, width: IMAGE_WIDTH / 8, backgroundColor: 'red' }} />;
   };
 }
