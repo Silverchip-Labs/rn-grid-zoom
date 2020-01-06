@@ -36,8 +36,8 @@ export default class App extends React.Component {
         ref={this.imgZoomRef}
         cropWidth={this.dimensionWidth}
         cropHeight={this.dimensionHeight}
-        imageWidth={IMAGE_WIDTH + IMAGE_OVERFLOW}
-        imageHeight={IMAGE_WIDTH + IMAGE_OVERFLOW}
+        imageWidth={IMAGE_WIDTH}
+        imageHeight={IMAGE_WIDTH}
         minScale={MIN_SCALE}
         maxScale={MAX_SCALE}
         onMove={this.handleMove}
@@ -45,13 +45,14 @@ export default class App extends React.Component {
         <View
           pointerEvents={'none'}
           style={{
-            width: IMAGE_WIDTH + IMAGE_OVERFLOW,
-            height: IMAGE_HEIGHT + IMAGE_OVERFLOW,
+            width: IMAGE_WIDTH,
+            height: IMAGE_HEIGHT,
             paddingHorizontal: IMAGE_PADDING,
-            paddingVertical: IMAGE_PADDING
+            paddingVertical: IMAGE_PADDING,
+            backgroundColor: 'grey'
           }}
         >
-          <Image
+          {/* <Image
             source={bee}
             style={{
               width: 300,
@@ -72,7 +73,7 @@ export default class App extends React.Component {
             />
           ) : (
             this._renderRows()
-          )}
+          )} */}
         </View>
       </ImageZoom>
     );
